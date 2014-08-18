@@ -1,0 +1,24 @@
+{
+  "name": "training-diary",
+  "version": "0.0.0",
+  "description": "",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mathias Benjaminsen",
+  "license": "ISC",
+  "devDependencies": {
+    "coffee-gulp": "0.0.2",
+    "gulp": "^3.8.7",
+    "gulp-coffee": "^2.1.1",
+    "gulp-concat": "^2.3.4",
+    "gulp-concat-vendor": "0.0.3",
+    "gulp-connect": "^2.0.6",
+    "gulp-image": "^0.4.3",
+    "gulp-minify-html": "^0.1.4",
+    "gulp-uglify": "^0.3.1",
+    "gulp-util": "^3.0.0",
+    "gulp-watch": "^0.6.9"
+  }
+}
