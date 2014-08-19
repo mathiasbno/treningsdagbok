@@ -5,15 +5,15 @@ angular.module("td")
     $stateProvider
       .state "home",
         url: "/"
-        templateUrl: "/templates/home/index.html"
+        templateUrl: "templates/home/index.html"
         controller: 'FrontPageCtrl'
 
       .state "user",
-        url: "/templates/user"
-        templateUrl: "user/show.html"
+        url: "/user"
+        templateUrl: "templates/user/show.html"
       .state "user_update",
-        url: "/views/user/update"
-        templateUrl: "/templates/user/update.html"
+        url: "/user/update"
+        templateUrl: "templates/user/update.html"
         controller: 'UpdateUsersCtrl'
 
       .state "otherwise",

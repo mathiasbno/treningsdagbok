@@ -23,13 +23,13 @@ var build = './build/public',
 var express = require("express"),
     app = express();
 
-app.set('views', 'build/views');
+app.set('views', 'build/view');
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 
 app.use(express.static(build));
 
-app.get("/*", function (req, res) {
+app.get("*", function (req, res) {
   res.render("application");
 });
 
@@ -41,7 +41,7 @@ gulp.task('default', function() {
 
 gulp.task('html', function() {
   gulp.src('./app/views/application.html')
-    .pipe(gulp.dest('build/views'));
+    .pipe(gulp.dest('./build/view'));
 
   gulp.src('./app/views/templates/**/*.html')
     .pipe(gulp.dest(build + '/templates'));
