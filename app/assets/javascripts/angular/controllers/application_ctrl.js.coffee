@@ -1,5 +1,5 @@
 angular.module("td")
-  .controller "ApplicationCtrl", ($scope, $rootScope, simpleLoginFactory, FIREBASE_URL) ->
+  .controller "ApplicationCtrl", ($scope, $rootScope, Restangular, simpleLoginFactory, FIREBASE_URL) ->
 
     $scope.logout = ->
       simpleLoginFactory.$logout()
@@ -8,12 +8,10 @@ angular.module("td")
     myRef = new Firebase(FIREBASE_URL);
     authClient = new FirebaseSimpleLogin myRef, (error, user) ->
       if (error)
-        # an error occurred while attempting login
         console.log error
       else if (user)
-        # user authenticated with Firebase
-        $scope.currentUser = user
+        Restangular.oneUrl('firebase', FIREBASE_URL + 'users/' + user.uid + '.json').get().then (fullUser) ->
+          $rootScope.currentUser = fullUser
         console.log "User ID: " + user.uid + ", Provider: " + user.provider
       else
-        # user is logged out
         console.log 'Not logged in'

@@ -11,6 +11,10 @@ angular.module("td")
       .state "user",
         url: "/user"
         templateUrl: "templates/user/show.html"
+      .state "user_new",
+        url: "/user/register"
+        templateUrl: "templates/user/register.html"
+        controller: 'RegisterUserCtrl'
       .state "user_update",
         url: "/user/update"
         templateUrl: "templates/user/update.html"

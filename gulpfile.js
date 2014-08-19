@@ -41,9 +41,11 @@ gulp.task('default', function() {
 
 gulp.task('html', function() {
   gulp.src('./app/views/application.html')
+    .on('error', function (err) { console.log(err.message); })
     .pipe(gulp.dest('./build/view'));
 
   gulp.src('./app/views/templates/**/*.html')
+    .on('error', function (err) { console.log(err.message); })
     .pipe(gulp.dest(build + '/templates'));
 });
 

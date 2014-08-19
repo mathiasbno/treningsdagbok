@@ -1,9 +1,9 @@
 angular.module("td")
-  .controller "LoginCtrl", ($scope, $firebase, $rootScope, simpleLoginFactory, FIREBASE_URL) ->
+  .controller "LoginCtrl", ($scope, $firebase, $rootScope, Restangular, simpleLoginFactory, FIREBASE_URL) ->
 
-    firebaseRef = new Firebase FIREBASE_URL
+    usersRef = new Firebase FIREBASE_URL + '/users'
 
-    $scope.user = {
+    $scope.loginUser = {
       email: '',
       password: ''
     }
@@ -11,12 +11,11 @@ angular.module("td")
     $scope.loginPassword = ->
       $scope.errors = []
 
-      promis = simpleLoginFactory.$login('password',
-        email: $scope.user.email,
-        password: $scope.user.password
-      ).then (user) ->
-        $rootScope.currentUser = user
-        $scope.user = {
+      simpleLoginFactory.$login('password',
+        email: $scope.loginUser.email,
+        password: $scope.loginUser.password
+      ).then (loginUser) ->
+        $scope.loginUser = {
           email: '',
           password: ''
         }
@@ -25,6 +24,20 @@ angular.module("td")
 
     $scope.loginFacebook = ->
       $scope.errors = []
-      simpleLoginFactory.$login("facebook").then (user) ->
-        debugger
-        firebaseRef.child('users').child(user.uid).set(user)
+      simpleLoginFactory.$login("facebook", {
+        rememberMe: true,
+        scope: 'email'
+      }).then (user) ->
+
+        usersRef.once 'value', (snapshot) ->
+          unless snapshot.hasChild(user.uid)
+            newUser = {
+              uid: user.uid
+              email: user.thirdPartyUserData.email
+              first_name: user.thirdPartyUserData.first_name
+              last_name: user.thirdPartyUserData.last_name
+              full_name: user.thirdPartyUserData.name
+              gender: user.thirdPartyUserData.gender
+            }
+
+            usersRef.child(user.uid).set newUser
