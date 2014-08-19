@@ -1,5 +1,4 @@
 var gulp = require('gulp'),
-    connect = require('gulp-connect'),
     concat = require('gulp-concat'),
     gutil = require('gulp-util'),
     uglify = require('gulp-uglify'),
@@ -12,31 +11,40 @@ var gulp = require('gulp'),
     minifyHTML = require('gulp-minify-html'),
     rename = require('gulp-rename');
 
-var build = './build',
-    html_path = './app/views/**/*.html',
-    style_path = './app/assets//stylesheets/**/**/*.sass',
+var build = './build/public',
+    html_path = './app/views/**/**/*.html',
+    style_path = './app/assets/stylesheets/**/**/*.sass',
     script_path = './app/assets/javascripts/**/**/*.coffee',
     lib_path = './app/assets/javascripts/lib/**/*.js',
     image_path = './app/assets/images/**/*';
+
+
+
+var express = require("express"),
+    app = express();
+
+app.set('views', 'build/views');
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
+
+app.use(express.static(build));
+
+app.get("/*", function (req, res) {
+  res.render("application");
+});
+
 
 
 gulp.task('default', function() {
   // place code for your default task here
 });
 
-gulp.task('connect', function() {
-  connect.server({
-    root: [build]
-  });
-});
-
 gulp.task('html', function() {
-  var opts = {empty:true,cdata:true};
+  gulp.src('./app/views/application.html')
+    .pipe(gulp.dest('build/views'));
 
-  gulp.src(html_path)
-    .pipe(minifyHTML(opts))
-    .on('error', function (err) { console.log(err.message); })
-    .pipe(gulp.dest(build))
+  gulp.src('./app/views/templates/**/*.html')
+    .pipe(gulp.dest(build + '/templates'));
 });
 
 gulp.task('script', function() {
@@ -72,6 +80,8 @@ gulp.task('image', function () {
 });
 
 gulp.task('watch', function () {
+  app.listen(3000);
+
   gulp.watch(html_path, ['html']);
   gulp.watch(script_path, ['script']);
   gulp.watch(lib_path, ['libs']);
