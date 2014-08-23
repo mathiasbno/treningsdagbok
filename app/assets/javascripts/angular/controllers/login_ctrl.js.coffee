@@ -2,6 +2,7 @@ angular.module("td")
   .controller "LoginCtrl", ($scope, $firebase, $rootScope, Restangular, simpleLoginFactory, FIREBASE_URL) ->
 
     usersRef = new Firebase FIREBASE_URL + '/users'
+    sync = $firebase usersRef
 
     $scope.loginUser = {
       email: '',
@@ -40,4 +41,4 @@ angular.module("td")
               gender: user.thirdPartyUserData.gender
             }
 
-            usersRef.child(user.uid).set newUser
+            sync.$set "#{user.uid}", newUser

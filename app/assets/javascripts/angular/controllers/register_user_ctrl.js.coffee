@@ -1,11 +1,14 @@
 angular.module("td")
   .controller "RegisterUserCtrl", ($scope, $state, $firebase, $rootScope, simpleLoginFactory, FIREBASE_URL) ->
 
-    firebaseRef = new Firebase FIREBASE_URL + 'users'
+    usersRef = new Firebase FIREBASE_URL + '/users'
+    sync = $firebase usersRef
 
     $scope.registerUser = {
-      email: '',
+      email: ''
       password: ''
+      first_name: ''
+      last_name: ''
     }
 
     $scope.register = ->
@@ -16,24 +19,27 @@ angular.module("td")
         newUser = {
           uid: user.uid
           email: user.email
+          first_name: $scope.user.first_name
+          last_name: $scope.user.last_name
+          name: "#{$scope.user.first_name} #{$scope.user.last_name}"
         }
 
-        onComplete = (error) ->
-          if !error
-            simpleLoginFactory.$login('password',
-              email: $scope.user.email,
-              password: $scope.user.password
-            ).then (user) ->
-              $scope.registerUser = {
-                email: '',
-                password: ''
-              }
+        sync.$set("#{user.uid}", newUser).then ->
+          simpleLoginFactory.$login('password',
+            email: $scope.user.email,
+            password: $scope.user.password
+          ).then (user) ->
+            $scope.registerUser = {
+              email: '',
+              password: ''
+            }
 
-              $state.go 'user_update'
-          else
-            console.log 'Synchronization failed'
-
-        firebaseRef.child(user.uid).set(newUser, onComplete)
+            $state.go 'user_update'
 
       , (error) ->
-        $scope.errors.push error
+        stripedError = {
+          code: error.code
+          message: error.message
+        }
+
+        $scope.errors.push stripedError

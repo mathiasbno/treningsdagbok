@@ -1,9 +1,10 @@
 angular.module("td")
-  .controller "ApplicationCtrl", ($scope, $rootScope, Restangular, simpleLoginFactory, FIREBASE_URL) ->
+  .controller "ApplicationCtrl", ($state, $scope, $rootScope, Restangular, simpleLoginFactory, FIREBASE_URL) ->
 
     $scope.logout = ->
       simpleLoginFactory.$logout()
       $rootScope.currentUser = undefined
+      $state.go 'home'
 
     myRef = new Firebase(FIREBASE_URL);
     authClient = new FirebaseSimpleLogin myRef, (error, user) ->

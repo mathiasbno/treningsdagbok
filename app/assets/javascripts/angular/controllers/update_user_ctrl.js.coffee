@@ -1,5 +1,38 @@
 angular.module("td")
-  .controller "UpdateUsersCtrl", ($state, $rootScope, $scope, Restangular) ->
+  .controller "UpdateUsersCtrl", ($rootScope, $scope, $firebase, sportFactory, FIREBASE_URL) ->
+
+    usersRef = new Firebase FIREBASE_URL + '/users'
+    userSync = $firebase usersRef
+
+    sportFactory.all().then (sports) ->
+      debugger
+      $scope.sports = sports
+
+
+    $scope.addSport = ->
+      $scope.errors = []
+      if $rootScope.currentUser.sports == undefined
+        $rootScope.currentUser.sports = []
+
+      sportObj = {"name": $scope.newSportInput.sport}
+      sportFactory.post(sportObj).then (sport) ->
+        $rootScope.currentUser.sports.push sport
+
+    $scope.updateUser = ->
+
+      debugger
+
+      updatedUser = {
+        email: $rootScope.currentUser.email
+        first_name: $rootScope.currentUser.first_name
+        last_name: $rootScope.currentUser.last_name
+        full_name: "#{$rootScope.currentUser.first_name} #{$rootScope.currentUser.last_name}"
+      }
+
+      userSync.$update("#{$rootScope.currentUser.uid}", updatedUser)
+
+
+
     # $scope.new_sport_panel = false
     # $scope.new_club_panel = false
     # $scope.uppdate_password_panel = false
