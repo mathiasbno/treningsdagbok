@@ -12,17 +12,17 @@
 
   <label for="sport">Sport</label>
 
-  <span ng-repeat="sport in sports">{{sport.name}}</span>
+  <span ng-repeat="sport in currentUser.sports">{{sport.name}}</span>
 
-  <select id="sport" ng-show="!newSport" ng-options="sport in sports">
-    <option value="" disabled>Velg idrett</option>
+  <select id="sport" ng-options="sport.name for sport in sports" domflag>
+    <!-- <option value="" disabled>Velg idrett</option> -->
   </select>
 
   <div ng-show="newSport">
     <label for="new-sport">New sport</label>
     <input id="new-sport" type="text" placeholder="New sport" ng-model="newSportInput.sport">
   </div>
-  <input type="button" value="Add sport" ng-click="addSport()" />
+  <input type="button" value="Add sport" ng-click="addSportToUser()" />
   <input type="button" value="New sport" ng-click="newSport = !newSport" />
 
   <input type="button" ng-click="updateUser()" value="Update user">

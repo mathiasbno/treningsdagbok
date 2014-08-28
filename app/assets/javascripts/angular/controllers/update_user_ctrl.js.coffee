@@ -1,22 +1,34 @@
 angular.module("td")
-  .controller "UpdateUsersCtrl", ($rootScope, $scope, $firebase, sportFactory, FIREBASE_URL) ->
-
-    usersRef = new Firebase FIREBASE_URL + '/users'
-    userSync = $firebase usersRef
+  .controller "UpdateUsersCtrl", ($rootScope, $scope, sportFactory, userFactory) ->
 
     sportFactory.all().then (sports) ->
-      debugger
       $scope.sports = sports
 
+    # $scope.sports = [{
+    #   $id: "-JV33dw7LQ50vPxclhbp",
+    #   $priority: null,
+    #   name: "Langrenn"
+    # },{
+    #   $id: "-JVSkh1qDUlYdxpQeurg",
+    #   $priority: null,
+    #   name: "Orientering"
+    # },{
+    #   $id: "-JVTLbUhzwsNc0pt202b",
+    #   $priority: null,
+    #   name: "Løping"
+    # }]
 
-    $scope.addSport = ->
+    $scope.addSportToUser = ->
       $scope.errors = []
       if $rootScope.currentUser.sports == undefined
         $rootScope.currentUser.sports = []
 
       sportObj = {"name": $scope.newSportInput.sport}
-      sportFactory.post(sportObj).then (sport) ->
-        $rootScope.currentUser.sports.push sport
+      sportFactory.post(sportObj).then (sportId) ->
+        sportFactory.find(sportId).then (sport) ->
+          $rootScope.currentUser.sports.push sport
+          $scope.newSportInput.sport = ''
+          $scope.newSport = false
 
     $scope.updateUser = ->
 
@@ -27,11 +39,10 @@ angular.module("td")
         first_name: $rootScope.currentUser.first_name
         last_name: $rootScope.currentUser.last_name
         full_name: "#{$rootScope.currentUser.first_name} #{$rootScope.currentUser.last_name}"
+        sports: $rootScope.currentUser.sports
       }
 
-      userSync.$update("#{$rootScope.currentUser.uid}", updatedUser)
-
-
+      userFactory.update("#{$scope.currentUser.uid}", updatedUser)
 
     # $scope.new_sport_panel = false
     # $scope.new_club_panel = false
