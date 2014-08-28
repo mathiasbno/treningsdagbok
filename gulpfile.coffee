@@ -47,6 +47,8 @@ gulp.task 'html', ->
     .on('error', (err) -> console.log('Error: ' + err.message))
     .pipe(gulp.dest(build + '/templates'))
 
+  return
+
 gulp.task 'script', ->
   gulp.src(script_path)
     .pipe(coffee({bare: true}))
@@ -54,12 +56,16 @@ gulp.task 'script', ->
     .pipe(concat('application.min.js'))
     .pipe(gulp.dest(build + '/script'))
 
+  return
+
 gulp.task 'lib', ->
-    gulp.src(lib_path)
+  gulp.src(lib_path)
     .pipe(concat('lib.js'))
     .pipe(uglify())
     .on('error', (err) -> console.log('Error: ' + err.message))
     .pipe(gulp.dest(build + '/script/lib'))
+
+  return
 
 gulp.task 'style', ->
   gulp.src(style_path)
@@ -70,10 +76,14 @@ gulp.task 'style', ->
     .pipe(concat('application.min.css'))
     .pipe(gulp.dest(build + '/css'))
 
+  return
+
 gulp.task 'image', ->
   gulp.src(image_path)
     .pipe(image())
     .pipe(gulp.dest(build + '/images'))
+
+  return
 
 gulp.task 'watch', ->
   app.listen(3000)
