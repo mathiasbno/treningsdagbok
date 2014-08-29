@@ -19,8 +19,6 @@ script_path = './app/assets/javascripts/**/**/*.coffee'
 lib_path = './app/assets/javascripts/lib/**/*.js'
 image_path = './app/assets/images/**/*'
 
-
-
 express = require "express"
 app = express()
 
@@ -30,12 +28,9 @@ app.set 'view engine', 'html'
 
 app.use(express.static(build))
 
-# app.get "/*", (req, res) ->
-#   res.render("application")
-
 app.use (req, res) ->
   # Use res.sendfile, as it streams instead of reading the file into memory.
-  res.sendfile('./build/view/application.html')
+  res.sendFile('./build/view/application.html')
 
 
 gulp.task 'html', ->
@@ -78,6 +73,11 @@ gulp.task 'style', ->
 
   return
 
+gulp.task 'prodServer', ->
+  gulp.src('./production/*')
+    .on('error', (err) -> console.log('Error: ' + err.message))
+    .pipe(gulp.dest('./build'))
+
 gulp.task 'image', ->
   gulp.src(image_path)
     .pipe(image())
@@ -94,4 +94,4 @@ gulp.task 'watch', ->
   gulp.watch(style_path, ['style'])
   gulp.watch(image_path, ['image'])
 
-gulp.task('default', ['watch', 'html', 'style', 'script', 'lib', 'image'])
+gulp.task('default', ['watch', 'html', 'style', 'script', 'lib', 'image', 'prodServer'])
