@@ -1,34 +1,31 @@
 angular.module("td")
   .controller "UpdateUsersCtrl", ($rootScope, $scope, sportFactory, userFactory) ->
+    $scope.newSport == undefined
+    $scope.selectedSport = {sportId: ''}
 
     sportFactory.all().then (sports) ->
       $scope.sports = sports
 
-    # $scope.sports = [{
-    #   $id: "-JV33dw7LQ50vPxclhbp",
-    #   $priority: null,
-    #   name: "Langrenn"
-    # },{
-    #   $id: "-JVSkh1qDUlYdxpQeurg",
-    #   $priority: null,
-    #   name: "Orientering"
-    # },{
-    #   $id: "-JVTLbUhzwsNc0pt202b",
-    #   $priority: null,
-    #   name: "Løping"
-    # }]
-
     $scope.addSportToUser = ->
-      $scope.errors = []
       if $rootScope.currentUser.sports == undefined
-        $rootScope.currentUser.sports = []
+          $rootScope.currentUser.sports = []
 
-      sportObj = {"name": $scope.newSportInput.sport}
-      sportFactory.post(sportObj).then (sportId) ->
-        sportFactory.find(sportId).then (sport) ->
+      if $scope.newSport == undefined
+        if $scope.selectedSport.sportId.length
+          sport = sportFactory.find($scope.selectedSport.sportId)
+
           $rootScope.currentUser.sports.push sport
-          $scope.newSportInput.sport = ''
-          $scope.newSport = false
+          $scope.selectedSport = {sportId: ''}
+
+      else
+        $scope.errors = []
+
+        sportObj = {"name": $scope.newSportInput.sport}
+        sportFactory.post(sportObj).then (sportId) ->
+          sportFactory.find(sportId).then (sport) ->
+            $rootScope.currentUser.sports.push sport
+            $scope.newSportInput.sport = ''
+            $scope.newSport = false
 
     $scope.updateUser = ->
 

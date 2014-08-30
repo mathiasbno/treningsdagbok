@@ -1,8 +1,5 @@
 angular.module("td")
-  .controller "RegisterUserCtrl", ($scope, $state, $firebase, $rootScope, simpleLoginFactory, FIREBASE_URL) ->
-
-    usersRef = new Firebase FIREBASE_URL + '/users'
-    sync = $firebase usersRef
+  .controller "RegisterUserCtrl", ($scope, $state, $rootScope, userFactory, authFactory, helperFactory) ->
 
     $scope.registerUser = {
       email: ''
@@ -14,32 +11,34 @@ angular.module("td")
     $scope.register = ->
       $scope.errors = []
       $scope.user = $scope.registerUser
-      simpleLoginFactory.$createUser($scope.user.email, $scope.user.password).then (user) ->
 
-        newUser = {
-          uid: user.uid
-          email: user.email
-          first_name: $scope.user.first_name
-          last_name: $scope.user.last_name
-          name: "#{$scope.user.first_name} #{$scope.user.last_name}"
+      $scope.user.first_name = helperFactory.uppercaseFirstLetter $scope.user.first_name
+      $scope.user.last_name = helperFactory.uppercaseFirstLetter $scope.user.last_name
+
+      authFactory.create($scope.user.email, $scope.user.password).then (user) ->
+
+        loginUser = {
+          email: user.email,
+          password: $scope.user.password
         }
 
-        sync.$set("#{user.uid}", newUser).then ->
-          simpleLoginFactory.$login('password',
-            email: $scope.user.email,
-            password: $scope.user.password
-          ).then (user) ->
-            $scope.registerUser = {
-              email: '',
-              password: ''
-            }
+        authFactory.login(user.provider, loginUser).then (loggedInUser) ->
 
-            $state.go 'user_update'
+          newUser = {
+            uid: loggedInUser.provider
+            email: loggedInUser.email
+            first_name: $scope.user.first_name
+            last_name: $scope.user.last_name
+            name: "#{$scope.user.first_name} #{$scope.user.last_name}"
+          }
 
-      , (error) ->
-        stripedError = {
-          code: error.code
-          message: error.message
-        }
+          userFactory.create(newUser).then (id) ->
+            userFactory.find(id).then (user) ->
+              $rootScope.currentUser = user
 
-        $scope.errors.push stripedError
+              $scope.registerUser = {
+                email: '',
+                password: ''
+              }
+
+              $state.go 'user_update'

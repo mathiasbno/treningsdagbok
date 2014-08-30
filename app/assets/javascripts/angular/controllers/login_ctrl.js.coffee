@@ -1,44 +1,29 @@
 angular.module("td")
-  .controller "LoginCtrl", ($scope, $firebase, $rootScope, Restangular, simpleLoginFactory, FIREBASE_URL) ->
-
-    usersRef = new Firebase FIREBASE_URL + '/users'
-    sync = $firebase usersRef
+  .controller "LoginCtrl", ($scope, $rootScope, authFactory, userFactory, helperFactory) ->
 
     $scope.loginUser = {
       email: '',
       password: ''
     }
 
-    $scope.loginPassword = ->
-      $scope.errors = []
+    $scope.login = (provider) ->
+      if provider == 'password'
+        authFactory.login(provider, $scope.loginUser).then (user) ->
+          id = helperFactory.escapeEmailAddress user.email
+          userFactory.find(id).then (user) ->
+            $rootScope.currentUser = user
 
-      simpleLoginFactory.$login('password',
-        email: $scope.loginUser.email,
-        password: $scope.loginUser.password
-      ).then (loginUser) ->
-        $scope.loginUser = {
-          email: '',
-          password: ''
-        }
-      , (error) ->
-        $scope.errors.push error
+      else if provider == 'facebook'
+        authFactory.login(provider).then (user) ->
+          newUser = {
+            provider: 'facebook'
+            email: user.thirdPartyUserData.email
+            first_name: user.thirdPartyUserData.first_name
+            last_name: user.thirdPartyUserData.last_name
+            full_name: user.thirdPartyUserData.name
+            gender: user.thirdPartyUserData.gender
+          }
 
-    $scope.loginFacebook = ->
-      $scope.errors = []
-      simpleLoginFactory.$login("facebook", {
-        rememberMe: true,
-        scope: 'email'
-      }).then (user) ->
-
-        usersRef.once 'value', (snapshot) ->
-          unless snapshot.hasChild(user.uid)
-            newUser = {
-              uid: user.uid
-              email: user.thirdPartyUserData.email
-              first_name: user.thirdPartyUserData.first_name
-              last_name: user.thirdPartyUserData.last_name
-              full_name: user.thirdPartyUserData.name
-              gender: user.thirdPartyUserData.gender
-            }
-
-            sync.$set "#{user.uid}", newUser
+          userFactory.create(newUser).then (id) ->
+            userFactory.find(id).then (user) ->
+              $rootScope.currentUser = user

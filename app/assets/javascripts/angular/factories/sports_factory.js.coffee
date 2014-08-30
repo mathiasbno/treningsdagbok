@@ -1,4 +1,4 @@
-angular.module("td").factory 'sportFactory', ($q, $firebase, FIREBASE_URL) ->
+angular.module("td").factory 'sportFactory', ($firebase, helperFactory, FIREBASE_URL) ->
     firebaseRef = new Firebase FIREBASE_URL + 'sports'
     sports = $firebase(firebaseRef)
 
@@ -10,18 +10,15 @@ angular.module("td").factory 'sportFactory', ($q, $firebase, FIREBASE_URL) ->
         return all
 
     factory.find = (id) ->
-      sportRef = new Firebase firebaseRef + '/' + id
-      sport = $firebase(sportRef)
+      list = sports.$asArray()
+      item = list.$getRecord(id)
 
-      one = sport.$asObject()
-      one.$loaded().then ->
-        return {'name': one.name}
+      return {'name': item.name}
 
     factory.post = (object) ->
-      object.name = object.name.charAt(0).toUpperCase() + object.name.substring(1)
+      object.name = helperFactory.uppercaseFirstLetter object.name
 
       sports.$asArray().$add(object).then (ref, error) ->
-        console.log ref.name()
         return ref.name()
 
     return factory

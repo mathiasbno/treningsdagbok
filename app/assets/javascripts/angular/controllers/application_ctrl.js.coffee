@@ -1,18 +1,14 @@
 angular.module("td")
-  .controller "ApplicationCtrl", ($state, $scope, $rootScope, Restangular, simpleLoginFactory, FIREBASE_URL) ->
+  .controller "ApplicationCtrl", ($state, $rootScope, $scope, authFactory, userFactory, helperFactory) ->
+
+    authFactory.auth().then (user) ->
+      if user.provider == 'facebook'
+        id = helperFactory.escapeEmailAddress user.thirdPartyUserData.email
+      else if user.provider == 'password'
+        id = helperFactory.escapeEmailAddress user.email
+
+      userFactory.find(id).then (user) ->
+        $rootScope.currentUser = user
 
     $scope.logout = ->
-      simpleLoginFactory.$logout()
-      $rootScope.currentUser = undefined
-      $state.go 'home'
-
-    myRef = new Firebase(FIREBASE_URL);
-    authClient = new FirebaseSimpleLogin myRef, (error, user) ->
-      if (error)
-        console.log error
-      else if (user)
-        Restangular.oneUrl('firebase', FIREBASE_URL + 'users/' + user.uid + '.json').get().then (fullUser) ->
-          $rootScope.currentUser = fullUser
-        console.log "User ID: " + user.uid + ", Provider: " + user.provider
-      else
-        console.log 'Not logged in'
+      authFactory.logOut()

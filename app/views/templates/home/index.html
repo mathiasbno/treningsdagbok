@@ -5,8 +5,8 @@
     <h2>Logg inn bruker</h2>
     <input type="text" placeholder="epost" ng-model="loginUser.email" />
     <input type="password" placeholder="password" ng-model="loginUser.password">
-    <input type="button" value="Logg inn" ng-click="loginPassword()">
-    <button ng-click="loginFacebook()">Facebook</button>
+    <input type="button" value="Logg inn" ng-click="login('password')">
+    <button ng-click="login('facebook')">Facebook</button>
   </form>
   <a ui-sref="user_new">Register new user</a>
 </div>

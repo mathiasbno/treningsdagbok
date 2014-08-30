@@ -30,7 +30,7 @@ app.use(express.static(build))
 
 app.use (req, res) ->
   # Use res.sendfile, as it streams instead of reading the file into memory.
-  res.sendFile('./build/view/application.html')
+  res.sendfile('./build/view/application.html')
 
 
 gulp.task 'html', ->

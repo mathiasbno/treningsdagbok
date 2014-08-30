@@ -14,8 +14,8 @@
 
   <span ng-repeat="sport in currentUser.sports">{{sport.name}}</span>
 
-  <select id="sport" ng-options="sport.name for sport in sports" domflag>
-    <!-- <option value="" disabled>Velg idrett</option> -->
+  <select id="sport" ng-if="!newSport" ng-model="selectedSport.sportId" ng-options="sport.$id as sport.name for sport in sports | orderBy: 'name'" domflag>
+    <option value="" disabled>Velg idrett</option>
   </select>
 
   <div ng-show="newSport">
