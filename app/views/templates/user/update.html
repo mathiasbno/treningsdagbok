@@ -1,29 +1,45 @@
 <h1>Update user</h1>
 
 <form>
-  <label for="first_name">First name:</label>
-  <input type="text" ng-model="currentUser.first_name" id="first_name">
-
-  <label for="last_name">Last name:</label>
-  <input type="text" ng-model="currentUser.last_name" id="last_name">
-
-  <label for="email">Email:</label>
-  <input type="text" ng-model="currentUser.email" id="email">
-
-  <label for="sport">Sport</label>
-
-  <span ng-repeat="sport in currentUser.sports">{{sport.name}}</span>
-
-  <select id="sport" ng-if="!newSport" ng-model="selectedSport.sportId" ng-options="sport.$id as sport.name for sport in sports | orderBy: 'name'" domflag>
-    <option value="" disabled>Velg idrett</option>
-  </select>
-
-  <div ng-show="newSport">
-    <label for="new-sport">New sport</label>
-    <input id="new-sport" type="text" placeholder="New sport" ng-model="newSportInput.sport">
+  <div>
+    <label for="first_name">First name:</label>
+    <input type="text" ng-model="currentUser.first_name" id="first_name">
   </div>
-  <input type="button" value="Add sport" ng-click="addSportToUser()" />
-  <input type="button" value="New sport" ng-click="newSport = !newSport" />
+  <div>
+    <label for="last_name">Last name:</label>
+    <input type="text" ng-model="currentUser.last_name" id="last_name">
+  </div>
+  <div>
+    <label for="email">Email:</label>
+    <input type="text" ng-model="currentUser.email" id="email">
+  </div>
+  <div>
+    <label for="gender">Gender</label>
+    <select id="gender" ng-model="currentUser.gender" ng-options="gender.id as gender.name for gender in genders">
+      <option value="" disabled>Velg kjønn</option>
+    </select>
+  </div>
+  <div>
+    <label for="sport">Sport</label>
 
-  <input type="button" ng-click="updateUser()" value="Update user">
+    <span ng-repeat="sport in currentUser.sports">{{sport.name}}</span>
+
+    <select id="sport"
+            ng-if="!newSport" ng-model="selectedSport.sportId"
+            ng-options="sport.$id as sport.name for sport in sports | orderBy: 'name'">
+      <option value="" disabled>Velg idrett</option>
+    </select>
+
+    <div ng-show="newSport">
+      <label for="new-sport">New sport</label>
+      <input id="new-sport" type="text" placeholder="New sport" ng-model="newSportInput.sport">
+    </div>
+    <input type="button" value="New sport" ng-click="newSport = !newSport" />
+    <div>
+      <input type="button" value="Add sport" ng-click="addSportToUser()" />
+    </div>
+  </div>
+  <div>
+    <input type="button" ng-click="updateUser()" value="Update user">
+  </div>
 </form>
