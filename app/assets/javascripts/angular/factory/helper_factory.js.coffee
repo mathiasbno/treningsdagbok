@@ -12,4 +12,7 @@ angular.module("td").factory 'helperFactory', () ->
       text = text.charAt(0).toUpperCase() + text.substring(1)
       return text
 
+    factory.stripObject = (array) ->
+      angular.copy(array)
+
     return factory
