@@ -13,6 +13,8 @@
   <body ng-controller="ApplicationCtrl">
     <header>
       <ul>
+        <li><a ui-sref="home">Home</a></li>
+        <li><a ui-sref="sessions">Sessions</a></li>
         <li ng-if="currentUser"><a ui-sref="user">{{currentUser.first_name}}</a></li>
         <li ng-if="currentUser"><button ng-click="logout()">Logg ut</button></li>
       </ul>
