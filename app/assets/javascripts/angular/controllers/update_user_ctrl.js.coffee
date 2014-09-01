@@ -1,7 +1,9 @@
 angular.module("td")
-  .controller "UpdateUsersCtrl", ($rootScope, $scope, sportFactory, userFactory) ->
+  .controller "UpdateUsersCtrl", ($rootScope, $scope, sportFactory, userFactory, helperFactory) ->
     $scope.newSport == undefined
     $scope.selectedSport = {sportId: ''}
+
+    $scope.genders = [{id: 'mail', name: 'Man'}, {id: 'femail', name: 'Woman'}]
 
     sportFactory.all().then (sports) ->
       $scope.sports = sports
@@ -29,6 +31,10 @@ angular.module("td")
 
     $scope.updateUser = ->
 
+      if $rootScope.currentUser.sports == undefined
+          $rootScope.currentUser.sports = []
+
+      id = helperFactory.escapeEmailAddress $rootScope.currentUser.$id
       debugger
 
       updatedUser = {
@@ -36,10 +42,11 @@ angular.module("td")
         first_name: $rootScope.currentUser.first_name
         last_name: $rootScope.currentUser.last_name
         full_name: "#{$rootScope.currentUser.first_name} #{$rootScope.currentUser.last_name}"
-        sports: $rootScope.currentUser.sports
+        gender: $rootScope.currentUser.gender
+        sports: helperFactory.stripObject($rootScope.currentUser.sports)
       }
 
-      userFactory.update("#{$scope.currentUser.uid}", updatedUser)
+      userFactory.update(id, updatedUser)
 
     # $scope.new_sport_panel = false
     # $scope.new_club_panel = false
