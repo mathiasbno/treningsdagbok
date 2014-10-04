@@ -23,6 +23,7 @@ angular.module("td")
       .state 'sessions',
         url: '/sessions'
         templateUrl: '/templates/session/index.html'
+        controller: 'SessionsCtrl'
 
       .state 'otherwise',
         url : '/'
