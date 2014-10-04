@@ -1,4 +1,4 @@
-angular.module("td").factory 'helperFactory', () ->
+angular.module("td").factory 'helperFactory', ($rootScope, $firebase, FIREBASE_URL) ->
 
     factory = {}
 
@@ -14,5 +14,9 @@ angular.module("td").factory 'helperFactory', () ->
 
     factory.stripObject = (array) ->
       angular.copy(array)
+
+    factory.seassionsRefConstructor = (year, week) ->
+      firebaseSessionsRef = new Firebase FIREBASE_URL + "sessions/#{$rootScope.currentUser.$id}/#{year}-#{week}"
+      return $firebase(firebaseSessionsRef).$asArray()
 
     return factory
