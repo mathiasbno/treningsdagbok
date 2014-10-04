@@ -1,24 +1,24 @@
 angular.module("td").factory 'sportFactory', ($firebase, helperFactory, FIREBASE_URL) ->
-    firebaseRef = new Firebase FIREBASE_URL + 'sports'
-    sports = $firebase(firebaseRef)
+  firebaseRef = new Firebase FIREBASE_URL + 'sports'
+  sports = $firebase(firebaseRef)
 
-    factory = {}
+  factory = {}
 
-    factory.all = ->
-      all = sports.$asArray()
-      all.$loaded().then ->
-        return all
+  factory.all = ->
+    all = sports.$asArray()
+    all.$loaded().then ->
+      return all
 
-    factory.find = (id) ->
-      list = sports.$asArray()
-      item = list.$getRecord(id)
+  factory.find = (id) ->
+    list = sports.$asArray()
+    item = list.$getRecord(id)
 
-      return {'name': item.name}
+    return {'name': item.name}
 
-    factory.post = (object) ->
-      object.name = helperFactory.uppercaseFirstLetter object.name
+  factory.create = (object) ->
+    object.name = helperFactory.uppercaseFirstLetter object.name
 
-      sports.$asArray().$add(object).then (ref, error) ->
-        return ref.name()
+    sports.$asArray().$add(object).then (ref, error) ->
+      return ref.name()
 
-    return factory
+  return factory
