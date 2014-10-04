@@ -1,1 +1,35 @@
-<h1>Sessions</h1>
+<h1>Trening</h1>
+<div ng-controller="CalendarCtrl">
+  <div>
+    <h3>Uke: {{current_week.week_number}}</h3>
+    <div class="day" ng-repeat="day in current_week.days">
+      <p>{{day.date_name}} – {{day.full_date | date : 'dd. MMMM'}}</p>
+      <div ng-repeat="session in active_sessions | filter:{date: day.full_date}">
+        <textarea ng-model="session.comment">{{session.comment}}</textarea>
+        <h3>{{session.comment}}</h3><br/>
+        <button ng-click="destroySession(session)">Slett</button>
+      </div>
+      <button ng-click="addSession(currentUser.$id, day)">Legg til økt</button>
+    </div>
+  </div>
+
+  <button ng-click="getPrevMonth()">Hent forige måned</button>
+  <button ng-click="getNextMonth()">Hent neste måned</button>
+
+  <h3>{{current_month.month_name}}</h3>
+  <div class="week"
+    ng-repeat="week in current_month.weeks"
+    ng-click="activeWeek(week.week_number)"
+    ng-class="{active: week.week_number == current_week.week_number}">
+    <h3>{{week.week_number}}</h3>
+    <div class="day" ng-repeat="day in week.days" ng-class="{active: day.full_date == today}">
+      <h3>{{day.full_date | date : 'dd. MMMM yyyy'}}</h3>
+      <ul>
+        <li ng-repeat="session in currentMonth.sessions | filter:{date: day.full_date}">
+          <h3>{{session.comment}}</h3>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+</div>
