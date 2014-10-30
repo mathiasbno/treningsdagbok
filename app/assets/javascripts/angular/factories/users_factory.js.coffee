@@ -1,4 +1,4 @@
-angular.module("td").factory 'userFactory', ($q, $firebase, $firebaseSimpleLogin, helperFactory, FIREBASE_URL) ->
+angular.module("td").factory 'userFactory', ($rootScope, $firebase, $firebaseSimpleLogin, helperFactory, FIREBASE_URL) ->
     firebaseUsersRef = new Firebase FIREBASE_URL + 'users'
     users = $firebase firebaseUsersRef
 

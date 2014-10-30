@@ -1,36 +1,43 @@
 angular.module("td").factory 'sessionsFactory', ($rootScope, $firebase, helperFactory, FIREBASE_URL) ->
   firebaseSessionsRef = ''
   sessions = ''
+  sessions_list = ''
 
   $rootScope.$watch 'currentUser', ->
     unless $rootScope.currentUser == undefined
-      factory.current_week_sessions(moment())
+      firebaseSessionsRef = new Firebase FIREBASE_URL + "users/#{$rootScope.currentUser.$id}/sessions"
+      sessions = $firebase(firebaseSessionsRef)
 
-  factory = {}
-
-  factory.current_week_sessions = (date_input) ->
-    date = moment(date_input)
+  sessionsDestination = (date_input) ->
+    if date_input
+      date = moment(date_input)
+    else
+      date = moment()
 
     sessions_date = {
       'week': date.get('week'),
       'year': date.get('year')
     }
-    firebaseSessionsRef = new Firebase FIREBASE_URL+ "sessions/#{$rootScope.currentUser.$id}/#{sessions_date.year}-#{sessions_date.week}"
-    sessions = $firebase(firebaseSessionsRef).$asArray()
+    firebaseSessionsRef = new Firebase FIREBASE_URL + "users/#{$rootScope.currentUser.$id}/sessions/#{sessions_date.year}-#{sessions_date.week}"
+    sessions = $firebase(firebaseSessionsRef)
 
-    factory.currentWeek()
+  factory = {}
 
-  factory.currentWeek = ->
-    sessions.$loaded().then (list) ->
-      $rootScope.active_sessions = list
+  factory.currentWeek = (date) ->
+    sessionsDestination(date)
+    sessions.$asArray().$loaded().then (list) ->
+      return list
 
-  factory.create = (id, date) ->
-    object = {'date': date.full_date}
-    sessions.$add(object).then (ref, error) ->
+  factory.create = (date) ->
+    object = {'date': "#{date}"}
+    sessionsDestination(date)
+    sessions.$asArray().$add(object).then (ref, error) ->
       return ref.name()
 
-  factory.update = (id, updatedSession) ->
-    sessions.$update(id, updatedSession).then (ref, error) ->
+  factory.update = (updatedSession) ->
+    sessionsDestination(updatedSession.date)
+    cleanObject = angular.toJson(updatedSession)
+    sessions.$update(updatedSession.$id, cleanObject).then (ref, error) ->
       return ref.name()
 
   factory.destroy = (id) ->

@@ -1,15 +1,17 @@
 <h1>Trening</h1>
 <div ng-controller="CalendarCtrl">
+  <button>Endre felter</button>
   <div>
     <h3>Uke: {{current_week.week_number}}</h3>
     <div class="day" ng-repeat="day in current_week.days">
-      <p>{{day.date_name}} – {{day.full_date | date : 'dd. MMMM'}}</p>
-      <div ng-repeat="session in active_sessions | filter:{date: day.full_date}">
-        <textarea ng-model="session.comment">{{session.comment}}</textarea>
-        <h3>{{session.comment}}</h3><br/>
+      <p>{{day.date_name}} – {{day.iso_date | date : 'dd. MMMM'}}</p>
+      <div ng-repeat="session in current_week_sessions | filter:{date: day.iso_date}">
+        <label ng-repeat="field in meta">
+          <div ng-include="field.type"></div>
+        </label>
         <button ng-click="destroySession(session)">Slett</button>
       </div>
-      <button ng-click="addSession(currentUser.$id, day)">Legg til økt</button>
+      <button ng-click="addSession(day.iso_date)">Legg til økt</button>
     </div>
   </div>
 
@@ -22,14 +24,38 @@
     ng-click="activeWeek(week.week_number)"
     ng-class="{active: week.week_number == current_week.week_number}">
     <h3>{{week.week_number}}</h3>
-    <div class="day" ng-repeat="day in week.days" ng-class="{active: day.full_date == today}">
-      <h3>{{day.full_date | date : 'dd. MMMM yyyy'}}</h3>
+    <div class="day" ng-repeat="day in week.days" ng-class="{active: day.iso_date == today}">
+      <h3>{{day.iso_date | date : 'dd. MMMM yyyy'}}</h3>
       <ul>
-        <li ng-repeat="session in currentMonth.sessions | filter:{date: day.full_date}">
+        <li ng-repeat="session in currentMonth.sessions | filter:{date: day.iso_date}">
           <h3>{{session.comment}}</h3>
         </li>
       </ul>
     </div>
   </div>
-
 </div>
+
+<script type="text/ng-template" id="time">
+  time
+  <input class="form-control" name="{{ name }}" type="date"
+    placeholder="{{ placeholder }}" ng-model="resource[name]">
+</script>
+
+<script type="text/ng-template" id="datetime">
+  <input class="form-control" name="{{ name }}" type="datetime-local"
+    placeholder="{{ placeholder }}" ng-model="resource[name]">
+</script>
+
+<script type="text/ng-template" id="integer">
+  <input class="form-control" name="{{ name }}" type="number"
+    placeholder="{{ placeholder }}" ng-model="resource[name]" step="1">
+</script>
+
+<script type="text/ng-template" id="string">
+  <input class="form-control" name="{{ name }}" type="text"
+    placeholder="{{ placeholder }}" ng-model="resource[name]">
+</script>
+
+<script type="text/ng-template" id="text">
+  <textarea ng-model="session.comment" ng-change="updateSession(session)">{{session.comment}}</textarea>
+</script>

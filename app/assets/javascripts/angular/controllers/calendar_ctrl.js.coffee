@@ -17,7 +17,7 @@ angular.module("td")
       $scope.theMoment = moment().week(weekNumber)
 
       unless $rootScope.currentUser == undefined
-        sessionsFactory.current_week_sessions($scope.theMoment)
+        sessionsFactory.currentWeek($scope.theMoment)
 
       $scope.current_week = calendarFactory.getWeek($scope.theMoment)
 

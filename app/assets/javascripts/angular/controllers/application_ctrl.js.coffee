@@ -1,5 +1,5 @@
 angular.module("td")
-  .controller "ApplicationCtrl", ($state, $rootScope, $scope, authFactory, userFactory, helperFactory) ->
+  .controller "ApplicationCtrl", ($state, $rootScope, $scope, authFactory, userFactory, metaFactory, helperFactory) ->
 
     authFactory.auth().then (user) ->
       unless user == null

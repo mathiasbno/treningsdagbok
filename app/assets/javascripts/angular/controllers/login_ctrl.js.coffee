@@ -1,5 +1,5 @@
 angular.module("td")
-  .controller "LoginCtrl", ($scope, $rootScope, authFactory, userFactory, helperFactory) ->
+  .controller "LoginCtrl", ($scope, $rootScope, authFactory, userFactory, metaFactory, helperFactory) ->
 
     $scope.loginUser = {
       email: '',
@@ -27,3 +27,5 @@ angular.module("td")
           userFactory.create(newUser).then (id) ->
             userFactory.find(id).then (user) ->
               $rootScope.currentUser = user
+              metaFactory.create(user.$id)
+              $scope.meta = metaFactory.all()

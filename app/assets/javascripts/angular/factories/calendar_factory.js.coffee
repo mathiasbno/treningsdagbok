@@ -21,7 +21,7 @@ angular.module("td").factory 'calendarFactory', () ->
         'date': day.get('date'),
         'month': day.get('month'),
         'year': day.get('year'),
-        'full_date': new Date(day),
+        'iso_date': moment(day).format('YYYY-MM-DD'),
         'date_name': day_names[day.isoWeekday() - 1],
         'week': day.week()
       }
