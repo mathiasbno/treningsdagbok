@@ -23,6 +23,13 @@ angular.module("td").factory 'sessionsFactory', ($rootScope, $firebase, helperFa
 
   factory = {}
 
+  stripsession = (session) ->
+
+    delete session.$id
+    delete session.$priority
+
+    return session
+
   factory.currentWeek = (date) ->
     sessionsDestination(date)
     sessions.$asArray().$loaded().then (list) ->
@@ -36,8 +43,7 @@ angular.module("td").factory 'sessionsFactory', ($rootScope, $firebase, helperFa
 
   factory.update = (updatedSession) ->
     sessionsDestination(updatedSession.date)
-    cleanObject = angular.toJson(updatedSession)
-    sessions.$update(updatedSession.$id, cleanObject).then (ref, error) ->
+    sessions.$update(updatedSession.$id, stripsession(updatedSession)).then (ref, error) ->
       return ref.name()
 
   factory.destroy = (id) ->
