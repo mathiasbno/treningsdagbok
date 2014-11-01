@@ -1,7 +1,7 @@
 <h1>Trening</h1>
 <div ng-controller="CalendarCtrl">
-  <button>Endre felter</button>
-  <div>
+  <div ng-controller="MetaCtrl">
+    <button ng-click="meta_toggle = !meta_toggle">Endre felter</button>
     <h3>Uke: {{current_week.week_number}}</h3>
     <div class="day" ng-repeat="day in current_week.days">
       <p>{{day.date_name}} – {{day.iso_date | date : 'dd. MMMM'}}</p>
@@ -9,6 +9,14 @@
         <label ng-repeat="field in meta">
           <div ng-include="field.type"></div>
         </label>
+        <div ng-if="meta_toggle">
+          <select ng-model="newMeta.metaid"
+              ng-options="meta.$id as meta.name for meta in meta_base | orderBy: 'name'">
+            <option value="" disabled>Velg meta</option>
+          </select>
+          <input type="text" ng-model="newMeta.name" placeholder="Name">
+          <button ng-click="addMeta(newMeta)">Legg til meta</button>
+        </div>
         <button ng-click="destroySession(session)">Slett</button>
       </div>
       <button ng-click="addSession(day.iso_date)">Legg til økt</button>

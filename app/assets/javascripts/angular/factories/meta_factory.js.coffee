@@ -8,6 +8,13 @@ angular.module("td").factory 'metaFactory', ($rootScope, $firebase, helperFactor
 
     factory = {}
 
+    factory.baseAll = ->
+      firebaseMetasRef = new Firebase FIREBASE_URL + "meta"
+      metaBase = $firebase firebaseMetasRef
+
+      metaBase.$asArray().$loaded().then (list) ->
+        return list
+
     factory.all = ->
       meta.$asArray().$loaded().then (list) ->
         return list
@@ -25,7 +32,7 @@ angular.module("td").factory 'metaFactory', ($rootScope, $firebase, helperFactor
         return ref.name()
 
     factory.add = (metaObject) ->
-      meta.$set(metaObject).then (ref, error) ->
+      meta.$asArray().$add(metaObject).then (ref, error) ->
         return ref.name()
 
     return factory
