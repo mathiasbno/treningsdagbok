@@ -12,15 +12,18 @@
     <link rel="stylesheet" type="text/css" href="../css/application.min.css">
 
   </head>
-  <body ng-controller="ApplicationCtrl">
-    <header>
+  <body ng-controller="ApplicationCtrl" ng-init="openMenu = false">
+    <header class="main-header">
+      <div class="toggle-menu" ng-click="openMenu = !openMenu"></div>
+    </header>
+    <aside ng-class="{open: openMenu}">
       <ul>
         <li><a ui-sref="home">Home</a></li>
         <li><a ui-sref="sessions">Sessions</a></li>
         <li ng-if="currentUser"><a ui-sref="user">{{currentUser.first_name}}</a></li>
         <li ng-if="currentUser"><button ng-click="logout()">Logg ut</button></li>
       </ul>
-    </header>
+    </aside>
     <div ui-view></div>
   </body>
 </html>

@@ -24,7 +24,6 @@ angular.module("td").factory 'sessionsFactory', ($rootScope, $firebase, helperFa
   factory = {}
 
   stripsession = (session) ->
-
     delete session.$id
     delete session.$priority
 

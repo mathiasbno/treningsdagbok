@@ -26,19 +26,19 @@
   <button ng-click="getPrevMonth()">Hent forige måned</button>
   <button ng-click="getNextMonth()">Hent neste måned</button>
 
-  <h3>{{current_month.month_name}}</h3>
-  <div class="week"
-    ng-repeat="week in current_month.weeks"
-    ng-click="activeWeek(week.week_number)"
-    ng-class="{active: week.week_number == current_week.week_number}">
-    <h3>{{week.week_number}}</h3>
-    <div class="day" ng-repeat="day in week.days" ng-class="{active: day.iso_date == today}">
-      <h3>{{day.iso_date | date : 'dd. MMMM yyyy'}}</h3>
-      <ul>
-        <li ng-repeat="session in currentMonth.sessions | filter:{date: day.iso_date}">
-          <h3>{{session.comment}}</h3>
-        </li>
-      </ul>
+  <div class="month">
+    <h3 class="month-name">{{current_month.month_name}}</h3>
+    <div class="row"
+      ng-repeat="week in current_month.weeks"
+      ng-click="activeWeek(week.week_number)"
+      ng-class="{active: week.week_number == current_week.week_number}">
+      <h3 class="week-number">{{week.week_number}}</h3>
+      <div class="day" ng-repeat="day in week.days" ng-class="{active: day.iso_date == today}">
+        <h3>{{day.iso_date | date : 'dd'}}</h3>
+        <div class="sessions-list">
+          <span ng-repeat="session in currentMonth.sessions | filter:{date: day.iso_date}"></span>
+        </div>
+      </div>
     </div>
   </div>
 </div>
