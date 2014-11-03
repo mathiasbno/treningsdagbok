@@ -28,7 +28,7 @@ angular.module("td").factory 'metaFactory', ($rootScope, $firebase, helperFactor
         {name: 'Kommentar', type: 'text'},
       ]
 
-      meta.$set(newMeta).then (ref, error) ->
+      meta.$asArray().$add(newMeta).then (ref, error) ->
         return ref.name()
 
     factory.add = (metaObject) ->

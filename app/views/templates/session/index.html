@@ -1,27 +1,38 @@
 <h1>Trening</h1>
-<div ng-controller="CalendarCtrl">
-  <div ng-controller="MetaCtrl">
+<main ng-controller="CalendarCtrl">
+  <section ng-controller="MetaCtrl" class="list-wrapper">
     <button ng-click="meta_toggle = !meta_toggle">Endre felter</button>
-    <h3>Uke: {{current_week.week_number}}</h3>
-    <div class="day" ng-repeat="day in current_week.days">
-      <p>{{day.date_name}} – {{day.iso_date | date : 'dd. MMMM'}}</p>
-      <div ng-repeat="session in current_week_sessions | filter:{date: day.iso_date}">
-        <label ng-repeat="field in meta">
-          <div ng-include="field.type"></div>
-        </label>
-        <div ng-if="meta_toggle">
-          <select ng-model="newMeta.metaid"
-              ng-options="meta.$id as meta.name for meta in meta_base | orderBy: 'name'">
-            <option value="" disabled>Velg meta</option>
-          </select>
-          <input type="text" ng-model="newMeta.name" placeholder="Name">
-          <button ng-click="addMeta(newMeta)">Legg til meta</button>
+    <div class="list-item-week">
+      <header>
+        <h3>Uke: {{current_week.week_number}}</h3>
+      </header>
+      <div class="day list-item-day" ng-repeat="day in current_week.days" ng-class="{active: toggle_active_day}">
+        <div class="day-header" ng-click="toggle_active_day = !toggle_active_day">
+          <div class="date-wrapper">
+            <span class="date">{{day.iso_date | date : 'dd'}}</span>
+            <span class="date-name">{{day.date_name}}</span>
+          </div>
+          <div class="actions">
+            <button ng-click="addSession(day.iso_date)">Legg til økt</button>
+          </div>
         </div>
-        <button ng-click="destroySession(session)">Slett</button>
+        <div class="day-fields-wrapper" ng-if="toggle_active_day" ng-repeat="session in current_week_sessions | filter:{date: day.iso_date}">
+          <label ng-repeat="field in meta">
+            <div ng-include="field.type"></div>
+          </label>
+          <div ng-if="meta_toggle">
+            <select ng-model="newMeta.type"
+                ng-options="meta.type as meta.name for meta in meta_base | orderBy: 'name'">
+              <option value="" disabled>Velg meta</option>
+            </select>
+            <input type="text" ng-model="newMeta.name" placeholder="Name">
+            <button ng-click="addMeta(newMeta)">Legg til meta</button>
+          </div>
+          <button ng-click="destroySession(session)">Slett</button>
+        </div>
       </div>
-      <button ng-click="addSession(day.iso_date)">Legg til økt</button>
     </div>
-  </div>
+  </section>
 
   <button ng-click="getPrevMonth()">Hent forige måned</button>
   <button ng-click="getNextMonth()">Hent neste måned</button>
@@ -41,7 +52,7 @@
       </div>
     </div>
   </div>
-</div>
+</main>
 
 <script type="text/ng-template" id="time">
   time
