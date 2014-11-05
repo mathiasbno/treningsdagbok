@@ -1,6 +1,7 @@
 angular.module("td")
   .controller "CalendarCtrl", ($rootScope, $scope, sessionsFactory, calendarFactory) ->
     $scope.theMoment = moment()
+    $scope.today = moment().format('YYYY-MM-DD')
     $scope.month_names = [ "Januar", "Februar", "Mars", "April", "Mai", "Juni",
     "Juli", "August", "Spetember", "Oktober", "November", "Desember" ]
     $scope.day_names = [ "Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag", "Søndag" ]
