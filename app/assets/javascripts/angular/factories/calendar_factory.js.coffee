@@ -61,7 +61,7 @@ angular.module("td").factory 'calendarFactory', () ->
     i = 0
 
     while i <= 11
-      month = factory.getMonth(date.clone().startOf('year'))
+      month = factory.getMonth(date.clone().startOf('year').month(i))
       months.push month
       i++
 

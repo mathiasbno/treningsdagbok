@@ -26,5 +26,5 @@ angular.module("td")
       $scope.current_month = calendarFactory.getMonth($scope.theMoment)
 
     $scope.current_month = calendarFactory.getMonth($scope.theMoment)
-    # $scope.current_year = calendarFactory.getYear($scope.theMoment)
+    $scope.current_year = calendarFactory.getYear($scope.theMoment)
     $scope.activeWeek($scope.theMoment.get('week'))
