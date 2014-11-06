@@ -5,7 +5,9 @@ angular.module("td").factory "authFactory", ($rootScope, $state, $firebaseSimple
   factory = {}
 
   factory.auth = ->
-    return auth.$getCurrentUser()
+    return auth.$getCurrentUser().then (user) ->
+      if user == null && location.pathname != "/"
+        document.location.href = "/"
 
   factory.login = (provider, loginUser) ->
     if provider == 'password'
