@@ -1,54 +1,81 @@
-.month
+.month-wrapper
+  background-color: #ccc
   overflow: hidden
   float: left
-  background: #ffffff
   box-shadow: 0px 2px 2px rgba(136, 136, 136, 0.3)
   margin-right: 20px
   margin-bottom: 20px
   width: calc((100% - 40px) / 3)
+  min-height: 259px
+  position: relative
 
   &:nth-child(3n+3)
     margin-right: 0
 
-  .row
-    clear: both
-    overflow: hidden
-    border-bottom: 1px solid #fff
-    min-height: 40px
+  .month
+    background: #ffffff
+    transition: all .10s ease-in-out
+    position: absolute
+    top: 0px
+    left: 0px
+    right: 0px
+    bottom: 0px
 
-    .day,
-    .week-number
-      background: #eee
-      float: left
-      padding: 8px
-      width: calc(100% / 8)
-      position: relative
-      top: 0px
-      bottom: 0px
+    &.active
+      position: absolute
+      top: 124px
+      left: 5%
+      width: 90%
+      height: 430px
+
+      .row
+        min-height: 94px
+
+    .month-name
+      padding: 20px
       text-align: center
 
-      &.active
-        background: yellow
+    .row
+      clear: both
+      overflow: hidden
+      border-bottom: 1px solid #fff
+      min-height: 40px
 
-      h3
+      .day,
+      .week-number
+        float: left
+        padding: 8px
+        width: calc(100% / 8)
+        position: relative
+        top: 0px
+        bottom: 0px
+        text-align: center
+
+        &.not-in-month
+          color: #666
+
+        &.active
+          background: yellow
+
+        h3
+          font-size: 0.8em
+          font-weight: 800
+
+        &:hover
+          background: #fff
+
+        .sessions-list
+          padding-top: 5px
+          min-height: 4px
+
+          span
+            width: 4px
+            height: 4px
+            border-radius: 50%
+
+      .week-number
+        display: inline-block
         font-size: 0.8em
         font-weight: 800
-
-      &:hover
-        background: #fff
-
-      .sessions-list
-        padding-top: 5px
-        min-height: 4px
-
-        span
-          width: 4px
-          height: 4px
-          border-radius: 50%
-
-    .week-number
-      display: inline-block
-      font-size: 0.8em
-      font-weight: 800
-      padding-bottom: 12px
-      color: rgba(0,0,0,0.6)
+        padding-bottom: 12px
+        color: rgba(0,0,0,0.6)
