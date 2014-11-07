@@ -1,6 +1,6 @@
 <h1>Trening</h1>
 <main ng-controller="CalendarCtrl">
-  <section ng-controller="MetaCtrl" class="list-wrapper">
+  <!-- <section ng-controller="MetaCtrl" class="list-wrapper">
     <button ng-click="meta_toggle = !meta_toggle">Endre felter</button>
     <div class="list-item-week">
       <header>
@@ -33,13 +33,32 @@
       </div>
     </div>
   </section>
+ -->
+
+  <section class="current-month" month-animation>
+    <div class="month">
+      <h3 class="month-name">{{current_month.month_name}}</h3>
+      <div class="row"
+        ng-repeat="week in current_month.weeks"
+        ng-click="activeWeek(week.week_number)"
+        ng-class="{active: week.week_number == current_week.week_number}">
+        <h3 class="week-number">{{week.week_number}}</h3>
+        <div class="day" ng-repeat="day in week.days" ng-class="{'active': day.iso_date == today , 'not-in-month': day.month != month.month_number}">
+          <h3>{{day.iso_date | date : 'dd'}}</h3>
+          <div class="sessions-list">
+            <span ng-repeat="session in currentMonth.sessions | filter:{date: day.iso_date}"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <button ng-click="getPrevMonth()">Hent forige måned</button>
   <button ng-click="getNextMonth()">Hent neste måned</button>
 
   <div class="year">
-    <div class="month-wrapper" ng-repeat="month in current_year.months" ng-click="active = !active">
-      <div class="month" ng-class="{active: active}">
+    <div class="month-wrapper" ng-repeat="month in current_year.months" ng-click="currentMonth(month.month_number)">
+      <div class="month">
         <h3 class="month-name">{{month.month_name}}</h3>
         <div class="row"
           ng-repeat="week in month.weeks"

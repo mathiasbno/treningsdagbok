@@ -2,9 +2,6 @@ angular.module("td")
   .controller "CalendarCtrl", ($rootScope, $scope, sessionsFactory, calendarFactory) ->
     $scope.theMoment = moment()
     $scope.today = moment().format('YYYY-MM-DD')
-    $scope.month_names = [ "Januar", "Februar", "Mars", "April", "Mai", "Juni",
-    "Juli", "August", "Spetember", "Oktober", "November", "Desember" ]
-    $scope.day_names = [ "Mandag", "Tirsdag", "Onsdag", "Torsdag", "Fredag", "Lørdag", "Søndag" ]
 
     $scope.getNextMonth = ->
       $scope.theMoment.add(1, 'month')
@@ -23,8 +20,14 @@ angular.module("td")
 
       $scope.current_week = calendarFactory.getWeek($scope.theMoment)
 
-    $scope.currentMonth = ->
-      $scope.current_month = calendarFactory.getMonth($scope.theMoment)
+    $scope.currentMonth = (montNumber) ->
+      if montNumber
+        date = moment().month(montNumber)
+        $scope.current_month = calendarFactory.getMonth(date)
+      else
+        $scope.current_month = calendarFactory.getMonth($scope.theMoment)
+
+      $scope.$broadcast 'openMonth', event.currentTarget
 
     $scope.current_month = calendarFactory.getMonth($scope.theMoment)
     $scope.current_year = calendarFactory.getYear($scope.theMoment)

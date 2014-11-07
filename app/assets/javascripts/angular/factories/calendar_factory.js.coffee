@@ -9,8 +9,6 @@ angular.module("td").factory 'calendarFactory', () ->
   factory.getWeek = (date_input) ->
     date = moment(date_input)
 
-    console.log date.get('week')
-
     week = 'week_number': date.get('week'), 'days': []
 
     i = 1
