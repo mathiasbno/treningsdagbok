@@ -12,7 +12,7 @@ angular.module("td")
           'width': _width
 
         $(element).show()
-        $(element).addClass('open')
+        $(element).delay(1000).addClass('open')
 
         $('.year').css
-          'marginTop': 600
+          'marginTop': 300
